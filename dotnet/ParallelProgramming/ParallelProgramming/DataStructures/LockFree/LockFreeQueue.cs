@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Threading;
 
-namespace ParallelProgramming
+namespace ParallelProgramming.DataStructures.LockFree
 {    
     
-    public class ConcurrentQueue<T>
+    public class LockFreeQueue<T> : QueueBase<T>
     {
         class Entry
         {
             internal readonly T Value;
             internal Entry Next;
+            //logically removed
             internal bool IsAlive => AliveState != 0;
             internal int AliveState;
             
@@ -24,7 +25,7 @@ namespace ParallelProgramming
         private Entry head;
         private Entry tail;
 
-        public ConcurrentQueue()        
+        public LockFreeQueue()        
         {
             var marker = new Entry(default(T), null, isAlive: false);
             head = marker;
@@ -33,7 +34,8 @@ namespace ParallelProgramming
         }
 
 
-        public void Enqueue(T v)
+        //never return false
+        public override bool TryEnqueue(T v)
         {
             var chunk = new Entry(v, null);
             while (true)
@@ -42,22 +44,26 @@ namespace ParallelProgramming
                 var nxt = t.Next;
                 if (nxt != null)
                 {
+                    //try to set tail to pred-null element 
                     Interlocked.CompareExchange(ref tail, nxt, t);
+                    //if failed, then tail was moved by helper thread
                     //continue
                 }
                 else
-                {
+                {                     
                     if (null == Interlocked.CompareExchange(ref tail.Next, chunk, null))
-                        return;
+                        return true;
+                    //try again, somebody enqueued something
                 }
             }
         }
 
         
-        public bool Dequeue(out T res)
+        public override bool TryDequeue(out T res)
         {
             while (true)
             {
+                //invariant - head is always points to last "logically removed" entry 
                 var h = head;
                 if (h.IsAlive) throw new InvalidOperationException("head.isAlive");
                 

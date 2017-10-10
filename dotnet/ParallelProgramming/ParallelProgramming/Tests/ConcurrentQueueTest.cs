@@ -2,13 +2,15 @@
 using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using ParallelProgramming.DataStructures;
+using ParallelProgramming.DataStructures.LockFree;
 
 namespace ParallelProgramming.Tests
 {
-    [TestFixture]
-    public class ConcurrentQueueTest
+    
+    public abstract class ConcurrentQueueTestBase
     {
-        private ConcurrentQueue<long> q;
+        private IQueue<long> q;
 
         private long acc;
         private const long Limit = 5000000;
@@ -31,7 +33,7 @@ namespace ParallelProgramming.Tests
             long prev = 0;
             while (true)
             {                    
-                if (q.Dequeue(out var cur))
+                if (q.TryDequeue(out var cur))
                 {
                     if (sequential) Assert.Less(prev, cur);
                     sum += cur;
@@ -51,6 +53,9 @@ namespace ParallelProgramming.Tests
             for (int i = 0; i < count; i++) setters[i] = Task.Run((Action)Setter);
             new TaskFactory().ContinueWhenAll(setters, _ => settersFinished = true);
         }
+
+
+        protected abstract IQueue<long> CreateQueue();
         
         [SetUp]
         public void SetUp()
@@ -58,7 +63,7 @@ namespace ParallelProgramming.Tests
             acc = 0;
             sequential = true;
             settersFinished = false;
-            q = new ConcurrentQueue<long>();
+            q = new LockFreeQueue<long>();
         }
         
         [Test]
@@ -67,9 +72,9 @@ namespace ParallelProgramming.Tests
             q.Enqueue(1);
             q.Enqueue(2);
 
-            Assert.True(q.Dequeue(out var res) && res == 1);
-            Assert.True(q.Dequeue(out res) && res == 2);
-            Assert.False(q.Dequeue(out res));
+            Assert.True(q.TryDequeue(out var res) && res == 1);
+            Assert.True(q.TryDequeue(out res) && res == 2);
+            Assert.False(q.TryDequeue(out res));
         }
         
         
@@ -108,4 +113,15 @@ namespace ParallelProgramming.Tests
             Assert.AreEqual(Limit*(Limit - 1)/2, getter1.Result + getter2.Result + getter3.Result);
         }
     }
+
+    
+    
+    [TestFixture]
+    internal class LockFreeQueueTest : ConcurrentQueueTestBase
+    {
+        protected override IQueue<long> CreateQueue()
+        {
+            return new LockFreeQueue<long>(); 
+        }
+    } 
 }
