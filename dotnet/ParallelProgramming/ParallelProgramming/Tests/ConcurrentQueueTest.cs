@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using ParallelProgramming.DataStructures;
 using ParallelProgramming.DataStructures.LockFree;
+using ParallelProgramming.DataStructures.WaitFree;
 
 namespace ParallelProgramming.Tests
 {
@@ -13,22 +15,25 @@ namespace ParallelProgramming.Tests
         private IQueue<long> q;
 
         private long acc;
-        private const long Limit = 5000000;
+        private const long Limit = 1000000;
         private const int Repeat = 1;
         private bool sequential;
         private volatile bool settersFinished;
 
         private void Setter ()
         {
+            ThreadName.Value = "Setter";
             long nxt;
             while ((nxt = Interlocked.Increment(ref acc)) < Limit)
             {
-                q.Enqueue(nxt);                    
+                q.Enqueue(nxt);                     
             }
         }
 
         private long Getter()
         {
+            ThreadName.Value = "Getter";
+            
             long sum = 0;
             long prev = 0;
             while (true)
@@ -63,7 +68,7 @@ namespace ParallelProgramming.Tests
             acc = 0;
             sequential = true;
             settersFinished = false;
-            q = new LockFreeQueue<long>();
+            q = CreateQueue();
         }
         
         [Test]
@@ -123,5 +128,49 @@ namespace ParallelProgramming.Tests
         {
             return new LockFreeQueue<long>(); 
         }
-    } 
+
+//        class A
+//        {
+//            private static int _x = 0;
+//            internal int x = Interlocked.Increment(ref _x); 
+//            internal A()
+//            {
+//                Console.WriteLine("A created: "+Thread.CurrentThread.ManagedThreadId);
+//            }
+//
+//            public override string ToString()
+//            {
+//                return "A:" + x;
+//            }
+//        }
+        
+//        [Test]
+//        public void TestThreadLocal()
+//        {
+//            ThreadLocal<A> tl = new ThreadLocal<A>(() => new A(), true);
+//            A x1 = tl.Value;
+//            A x2;
+//            A x3;
+//            new Thread(() => { x2 = tl.Value; }).Start();
+//            new Thread(() => { x3 = tl.Value; }).Start();
+//            Thread.Sleep(100);
+//
+//            tl.Value = new A();
+//            foreach (var a in tl.Values)
+//            {
+//                Console.Write(a);
+//                Console.Write(" ");
+//            }
+//            Console.WriteLine();
+//        }
+    }
+
+    [TestFixture]
+    internal class WaitFreeQueueTest : ConcurrentQueueTestBase
+    {
+        protected override IQueue<long> CreateQueue()
+        {
+            return new WaitFreeQueue<long>();
+        }
+    }
 }
