@@ -122,48 +122,23 @@ namespace ParallelProgramming.Tests
     
     
     [TestFixture]
-    internal class LockFreeQueueTest : ConcurrentQueueTestBase
+    internal class LinkedLockFreeQueueTest : ConcurrentQueueTestBase
     {
         protected override IQueue<long> CreateQueue()
         {
-            return new LockFreeQueue<long>(); 
+            return new LinkedLockFreeQueue<long>(); 
         }
-
-//        class A
-//        {
-//            private static int _x = 0;
-//            internal int x = Interlocked.Increment(ref _x); 
-//            internal A()
-//            {
-//                Console.WriteLine("A created: "+Thread.CurrentThread.ManagedThreadId);
-//            }
-//
-//            public override string ToString()
-//            {
-//                return "A:" + x;
-//            }
-//        }
-        
-//        [Test]
-//        public void TestThreadLocal()
-//        {
-//            ThreadLocal<A> tl = new ThreadLocal<A>(() => new A(), true);
-//            A x1 = tl.Value;
-//            A x2;
-//            A x3;
-//            new Thread(() => { x2 = tl.Value; }).Start();
-//            new Thread(() => { x3 = tl.Value; }).Start();
-//            Thread.Sleep(100);
-//
-//            tl.Value = new A();
-//            foreach (var a in tl.Values)
-//            {
-//                Console.Write(a);
-//                Console.Write(" ");
-//            }
-//            Console.WriteLine();
-//        }
     }
+    
+    [TestFixture]
+    internal class ImmutableBasedLockFreeQueueTest : ConcurrentQueueTestBase
+    {
+        protected override IQueue<long> CreateQueue()
+        {
+            return new ImmutableBasedLockFreeQueue<long>(); 
+        }
+    }
+
 
     [TestFixture]
     internal class WaitFreeQueueTest : ConcurrentQueueTestBase

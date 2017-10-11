@@ -4,7 +4,7 @@ using System.Threading;
 namespace ParallelProgramming.DataStructures.LockFree
 {    
     
-    public class LockFreeQueue<T> : QueueBase<T>
+    public class LinkedLockFreeQueue<T> : QueueBase<T>
     {
         class Entry
         {
@@ -25,7 +25,7 @@ namespace ParallelProgramming.DataStructures.LockFree
         private Entry head;
         private Entry tail;
 
-        public LockFreeQueue()        
+        public LinkedLockFreeQueue()        
         {
             var marker = new Entry(default(T), null, isAlive: false);
             head = marker;

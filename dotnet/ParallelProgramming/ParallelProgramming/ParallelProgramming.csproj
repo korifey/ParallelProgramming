@@ -33,12 +33,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DataStructures\Base\Boxed.cs" />
     <Compile Include="DataStructures\Base\QueueBase.cs" />
     <Compile Include="DataStructures\Base\ThreadName.cs" />
     <Compile Include="DataStructures\Immutable\ImmutableQueue.cs" />
     <Compile Include="DataStructures\Immutable\ImmutableStack.cs" />
     <Compile Include="DataStructures\IQueue.cs" />
-    <Compile Include="DataStructures\LockFree\LockFreeQueue.cs" />
+    <Compile Include="DataStructures\LockFree\ImmutableBasedLockFreeQueue.cs" />
+    <Compile Include="DataStructures\LockFree\LinkedLockFreeQueue.cs" />
     <Compile Include="DataStructures\WaitFree\WaitFreeCombinator.cs" />
     <Compile Include="DataStructures\WaitFree\WaitFreeQueue.cs" />
     <Compile Include="Tests\ConcurrentQueueTest.cs" />
