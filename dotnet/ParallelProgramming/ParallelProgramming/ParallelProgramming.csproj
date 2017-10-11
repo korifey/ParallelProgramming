@@ -39,6 +39,7 @@
     <Compile Include="DataStructures\Immutable\ImmutableQueue.cs" />
     <Compile Include="DataStructures\Immutable\ImmutableStack.cs" />
     <Compile Include="DataStructures\IQueue.cs" />
+    <Compile Include="DataStructures\LockBased\SynchronizedQueue.cs" />
     <Compile Include="DataStructures\LockFree\ImmutableBasedLockFreeQueue.cs" />
     <Compile Include="DataStructures\LockFree\LinkedLockFreeQueue.cs" />
     <Compile Include="DataStructures\WaitFree\WaitFreeCombinator.cs" />
@@ -50,6 +51,7 @@
     <Reference Include="nunit.framework, Version=3.8.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb">
       <HintPath>..\packages\NUnit.3.8.1\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="System" />
     <Reference Include="System.Collections.Immutable, Version=1.2.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <HintPath>..\packages\System.Collections.Immutable.1.4.0\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
     </Reference>

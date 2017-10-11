@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using ParallelProgramming.DataStructures;
+using ParallelProgramming.DataStructures.LockBased;
 using ParallelProgramming.DataStructures.LockFree;
 using ParallelProgramming.DataStructures.WaitFree;
 
@@ -16,6 +17,8 @@ namespace ParallelProgramming.Tests
 
         private long acc;
         private const long Limit = 1000000;
+        private const long Sum = Limit*(Limit-1)/2;
+        
         private const int Repeat = 1;
         private bool sequential;
         private volatile bool settersFinished;
@@ -54,9 +57,17 @@ namespace ParallelProgramming.Tests
 
         private void RunSetters(int count)
         {
-            Task[] setters = new Task[count];
-            for (int i = 0; i < count; i++) setters[i] = Task.Run((Action)Setter);
-            new TaskFactory().ContinueWhenAll(setters, _ => settersFinished = true);
+            Task[] tasks = new Task[count];
+            for (int i = 0; i < count; i++) tasks[i] = Task.Run((Action)Setter);
+            new TaskFactory().ContinueWhenAll(tasks, _ => settersFinished = true);
+        }
+
+        private long RunGettersAndWait(int count)
+        {
+            var tasks = new Task<long>[count];
+            for (int i = 0; i < count; i++) tasks[i] = Task.Run((Func<long>)Getter);
+
+            return tasks.Aggregate(0L, (sum, task) => sum + task.Result);
         }
 
 
@@ -87,20 +98,14 @@ namespace ParallelProgramming.Tests
         public void TestOneSetterAndOneGetter()
         {
             RunSetters(1);
-            var getter = Task.Run((Func<long>)Getter);
-            Assert.AreEqual(Limit*(Limit - 1)/2, getter.Result);
+            Assert.AreEqual(Sum, RunGettersAndWait(1));
         }
         
         [Test, Repeat(Repeat)]
         public void TestOneSettersAndSeveralGetters()
         {
             RunSetters(1);
-
-            var getter1 = Task.Run((Func<long>) Getter);
-            var getter2 = Task.Run((Func<long>) Getter);
-            Task.WaitAll(getter1, getter2);
-            
-            Assert.AreEqual(Limit*(Limit - 1)/2, getter1.Result + getter2.Result);
+            Assert.AreEqual(Sum, RunGettersAndWait(2));            
         }
         
         [Test, Repeat(Repeat)]
@@ -108,18 +113,28 @@ namespace ParallelProgramming.Tests
         {
             sequential = false;
             RunSetters(3);
-
-            var getter1 = Task.Run((Func<long>) Getter);
-            var getter2 = Task.Run((Func<long>) Getter);
-            var getter3 = Task.Run((Func<long>) Getter);
-            Task.WaitAll(getter1, getter2, getter3);
-            
-            
-            Assert.AreEqual(Limit*(Limit - 1)/2, getter1.Result + getter2.Result + getter3.Result);
+            Assert.AreEqual(Sum, RunGettersAndWait(3));
+        }
+        
+        [Test, Repeat(Repeat)]
+        public void TestManySettersAndManyGetters()
+        {
+            sequential = false;
+            RunSetters(10);
+            Assert.AreEqual(Sum, RunGettersAndWait(10));
         }
     }
 
     
+    
+    [TestFixture]
+    internal class SynchronizedQueueTest : ConcurrentQueueTestBase
+    {
+        protected override IQueue<long> CreateQueue()
+        {
+            return new SynchronizedQueue<long>(); 
+        }
+    }
     
     [TestFixture]
     internal class LinkedLockFreeQueueTest : ConcurrentQueueTestBase
