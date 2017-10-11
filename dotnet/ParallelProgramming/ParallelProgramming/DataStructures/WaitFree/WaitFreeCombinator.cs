@@ -20,7 +20,7 @@ namespace ParallelProgramming.DataStructures.WaitFree
             {
                 Op = op;
                 Parameter = parameter;
-                var v = Interlocked.Increment(ref Version);
+                Interlocked.Increment(ref Version);
                 ThreadId = Thread.CurrentThread.ManagedThreadId;
             }
         }
@@ -62,9 +62,7 @@ namespace ParallelProgramming.DataStructures.WaitFree
         public object Apply(ApplyDelegate op, object parameter)
         {
             requests.Value.Put(op, parameter);
-            Interlocked.MemoryBarrier();
             Eval();
-            Interlocked.MemoryBarrier();
             var threadId = Thread.CurrentThread.ManagedThreadId;
             return state.Board[threadId].Result;
         }
@@ -80,8 +78,9 @@ namespace ParallelProgramming.DataStructures.WaitFree
                 
                 foreach (var request in requests.Values)
                 {                    
-                    if (!board.TryGetValue(request.ThreadId, out var tlResult)) tlResult = new TlResult(0, null);
-//                    Console.WriteLine("op="+ThreadName.Value+", threadId="+request.ThreadId+", tlResult.version="+tlResult.Version+", request.version="+request.Version);
+                    if (!board.TryGetValue(request.ThreadId, out var tlResult)) 
+                        tlResult = new TlResult(0, null);
+                    
                     if (request.Version == tlResult.Version + 1)
                     {
                         d = request.Op(d, request.Parameter, out var res);
@@ -91,12 +90,9 @@ namespace ParallelProgramming.DataStructures.WaitFree
 
                 if (Interlocked.CompareExchange(ref state, new State(d, board), s) == s)
                 {
-//                    Console.WriteLine("Success: "+ThreadName.Value+" ->"+requests.Value.Version);
                     return;
                 }
             }
-
-//            Console.WriteLine("Failed: "+ThreadName.Value+" ->"+requests.Value.Version);
         }
     }
 }
