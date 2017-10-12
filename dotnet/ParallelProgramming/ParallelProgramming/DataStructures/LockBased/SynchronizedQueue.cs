@@ -2,9 +2,18 @@
 
 namespace ParallelProgramming.DataStructures.LockBased
 {
+    public class BadSynchronizedQueue<T> : SynchronizedQueue<T>
+    {
+        private int x;
+        public BadSynchronizedQueue()
+        {
+            x = queue.GetHashCode();
+        }
+    }
+    
     public class SynchronizedQueue<T> : QueueBase<T>
     {
-        readonly LinkedList<T> queue = new LinkedList<T>();
+        protected readonly LinkedList<T> queue = new LinkedList<T>();
         
         
         public override bool TryEnqueue(T res)

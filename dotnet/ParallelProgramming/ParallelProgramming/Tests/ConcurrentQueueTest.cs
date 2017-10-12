@@ -137,6 +137,15 @@ namespace ParallelProgramming.Tests
     }
     
     [TestFixture]
+    internal class SynchronizedQueueBadTest : ConcurrentQueueTestBase
+    {
+        protected override IQueue<long> CreateQueue()
+        {
+            return new BadSynchronizedQueue<long>(); 
+        }
+    }
+    
+    [TestFixture]
     internal class LinkedLockFreeQueueTest : ConcurrentQueueTestBase
     {
         protected override IQueue<long> CreateQueue()
