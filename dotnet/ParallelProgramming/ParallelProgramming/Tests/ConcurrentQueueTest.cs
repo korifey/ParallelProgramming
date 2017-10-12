@@ -58,14 +58,14 @@ namespace ParallelProgramming.Tests
         private void RunSetters(int count)
         {
             Task[] tasks = new Task[count];
-            for (int i = 0; i < count; i++) tasks[i] = Task.Run((Action)Setter);
+            for (int i = 0; i < count; i++) tasks[i] = Task.Factory.StartNew(Setter, TaskCreationOptions.LongRunning);
             new TaskFactory().ContinueWhenAll(tasks, _ => settersFinished = true);
         }
 
         private long RunGettersAndWait(int count)
         {
             var tasks = new Task<long>[count];
-            for (int i = 0; i < count; i++) tasks[i] = Task.Run((Func<long>)Getter);
+            for (int i = 0; i < count; i++) tasks[i] = Task.Factory.StartNew(Getter, TaskCreationOptions.LongRunning);
 
             return tasks.Aggregate(0L, (sum, task) => sum + task.Result);
         }
