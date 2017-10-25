@@ -22,7 +22,7 @@ namespace ParallelProgramming.DataStructures.LockBased
                 queue.AddLast(res);
                 return true;
             }
-        }
+        } 
 
         public override bool TryDequeue(out T res)
         {
