@@ -44,8 +44,11 @@
     <Compile Include="DataStructures\LockFree\LinkedLockFreeQueue.cs" />
     <Compile Include="DataStructures\WaitFree\WaitFreeCombinator.cs" />
     <Compile Include="DataStructures\WaitFree\WaitFreeQueue.cs" />
+    <Compile Include="Demo\1.ThreadAffinity.cs" />
+    <Compile Include="Demo\2.ThreadAbort.cs" />
     <Compile Include="Tests\ConcurrentQueueTest.cs" />
     <Compile Include="Tests\ImmutableQueueTest.cs" />
+    <Compile Include="Util\Primes.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="nunit.framework, Version=3.8.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb">
@@ -58,6 +61,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Demo\0.Plan.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

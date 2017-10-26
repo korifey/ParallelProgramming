@@ -6,6 +6,7 @@ namespace ParallelProgramming.Tests
     [TestFixture]
     public class ImmutableQueueTest
     {
+        
         [Test]
         public void TestBasic()
         {
