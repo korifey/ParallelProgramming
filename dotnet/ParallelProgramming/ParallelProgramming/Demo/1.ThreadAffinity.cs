@@ -17,7 +17,7 @@ namespace ParallelProgramming.Demo
             var res = Primes.Between(range);
             
                 
-            Console.WriteLine($"ThreadId: {Thread.CurrentThread.ManagedThreadId}," +
+            Console.WriteLine($"ThreadId={Thread.CurrentThread.ManagedThreadId}, " +
                               $"range=[{range.From},{range.ToExclusive}), " +
                               $"result = {res}, " +
                               $"time = {Environment.TickCount - time} ms");
@@ -28,7 +28,7 @@ namespace ParallelProgramming.Demo
         
         private void Workload()
         {
-            const int perThread = 1_000_000_000;
+            const int perThread = 1_000_000;
             var threadStartRange = 0;
             
             var t1 = new Thread(ThreadBody);
