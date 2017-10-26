@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Runtime.InteropServices.ComTypes;
 using System.Threading;
 using NUnit.Framework;
-using ParallelProgramming.Util;
 
 namespace ParallelProgramming.Demo
 {
@@ -14,32 +11,49 @@ namespace ParallelProgramming.Demo
             Thread.Sleep(10000);
         };
 
+        
+        
+        
+        
 
         [Test]
-        public void ThreadAbort()
+        public void TestThreadAbort()
         {
             
-            var thread = new Thread(ThreadSleepCatch);
+            var thread = new Thread(ThreadSleep);
             thread.Start();
             
-            Thread.Sleep(100);
+            Thread.Sleep(200);
             thread.Abort();
             thread.Join();
         }
 
+        
+        
+        
+        
+        
+        
+        
      
         
-        private ThreadStart ThreadSleepCatch => () =>
+        private ThreadStart ThreadForeverYieldCatch => () =>
         {
             try
             {
                 Console.WriteLine($"Try: {Elapsed}");
-                Thread.Sleep(10000);
+                while (true)
+                {
+                    //hardwork!
+                    Thread.SpinWait(1000000);
+                    Thread.Yield();
+                }
             }
             catch (Exception e)
             {
                 Console.WriteLine($"Catch: {Elapsed}");
                 Console.WriteLine(e);
+                //todo reset
             }
             Console.WriteLine($"After try: {Elapsed}");
             
@@ -48,10 +62,11 @@ namespace ParallelProgramming.Demo
         
         
         
+        
+        
 
         private ThreadStart ThreadSleepInFinally => () =>
         {
-            var start = Environment.TickCount;
             try
             {
                 Console.WriteLine($"Try: {Elapsed}");
@@ -64,11 +79,44 @@ namespace ParallelProgramming.Demo
             }
         };
 
+        
+        
+        
+        
+        
+        
+        
+        private readonly AutoResetEvent FinishedEvent = new AutoResetEvent(false);
+        private ThreadStart ThreadThatWaitsInterrupt => () =>
+        {
+            try
+            {
+                Console.WriteLine($"Try: {Elapsed}");
+//                while (true)
+//                {
+//                    Thread.Sleep(1);
+//                }
+
+                FinishedEvent.WaitOne();
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Catch: {Elapsed}");
+                Console.WriteLine(e);
+            }
+            Console.WriteLine($"After try: {Elapsed}");
+        };
+
+        
+        
+        
+        
 
         
         private readonly ThreadLocal<int> startTime = new ThreadLocal<int>(() => Environment.TickCount);
         
-        private int Elapsed => - startTime.Value + Environment.TickCount;
+        private string Elapsed => $"{- startTime.Value + Environment.TickCount} ms";
         
         
     }

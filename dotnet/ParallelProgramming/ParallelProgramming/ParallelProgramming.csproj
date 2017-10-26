@@ -46,6 +46,12 @@
     <Compile Include="DataStructures\WaitFree\WaitFreeQueue.cs" />
     <Compile Include="Demo\1.ThreadAffinity.cs" />
     <Compile Include="Demo\2.ThreadAbort.cs" />
+    <Compile Include="Demo\3.Locks.cs" />
+    <Compile Include="Demo\4.SpinWaitLock.cs" />
+    <Compile Include="Demo\5.ReadWriteLock.cs" />
+    <Compile Include="Demo\Experiments.cs" />
+    <Compile Include="Demo\Rw\SimpleReadWriteLock.cs" />
+    <Compile Include="Demo\Rw\ReadWriteLockCookie.cs" />
     <Compile Include="Tests\ConcurrentQueueTest.cs" />
     <Compile Include="Tests\ImmutableQueueTest.cs" />
     <Compile Include="Util\Primes.cs" />

@@ -1,5 +1,17 @@
 1. Мотивация, системы разделения времени. Использование ресурсов.
 2. Кооперативная и вытесняющая многозадачность, прерывания по таймеру и диспатчинг
+
 3. Модель приложение-процессы-потоки
+
 4. Приоритеты, PriorityBoost, ProcessAffinity -> Demo1
-5. Свойства потока - CoreDemo1, прерывание
+5. Свойства потока - CoreDemo1
+6. Прерывание, почему Abort не используется везде, Interrupt, ThreadLocal
+
+7. Взаимодествие между потоками
+8. Counter, lock-и, Interlocked
+9. Tas lock, reentrancy
+10. Monitor.Enter/... Monitor.Pulse, Monitor.Wait
+11. ReadWriteLock - объяснить и показвать
+12. Upgradable
+13. Immutable Collectiond
+14. Lock Free Collections

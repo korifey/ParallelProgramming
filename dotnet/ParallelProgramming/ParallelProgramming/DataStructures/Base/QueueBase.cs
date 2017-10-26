@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.Contracts;
-using System.Threading;
-using NUnit.Framework;
+﻿using System.Threading;
 using ParallelProgramming.DataStructures;
 
 namespace ParallelProgramming

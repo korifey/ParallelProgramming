@@ -7,6 +7,7 @@ namespace ParallelCore.Demo
         public static void Do()
         {
             
+            //todo wait for this thread
             var thread = new Thread(() =>
             {
                 Thread.Sleep(60_000);
