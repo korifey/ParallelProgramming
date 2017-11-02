@@ -13,7 +13,8 @@ namespace ParallelCore
                               $"PriorityKind={Process.GetCurrentProcess().BasePriority}, " +
                               $"ThreadPriority={Thread.CurrentThread.Priority}");
 
-            Demo1.Do();
+//            Demo1.Do();
+            Demo4Async.Do();
         }
     }
 }

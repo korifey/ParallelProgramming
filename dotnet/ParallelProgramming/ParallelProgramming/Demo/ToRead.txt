@@ -1,0 +1,3 @@
+
+
+Asynchronous Programming Patterns: https://msdn.microsoft.com/ru-ru/library/jj152938(v=vs.110).aspx

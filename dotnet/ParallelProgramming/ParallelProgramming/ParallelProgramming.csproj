@@ -40,15 +40,22 @@
     <Compile Include="DataStructures\Immutable\ImmutableStack.cs" />
     <Compile Include="DataStructures\IQueue.cs" />
     <Compile Include="DataStructures\LockBased\SynchronizedQueue.cs" />
+    <Compile Include="DataStructures\LockFree\BlockingQueue.cs" />
     <Compile Include="DataStructures\LockFree\ImmutableBasedLockFreeQueue.cs" />
     <Compile Include="DataStructures\LockFree\LinkedLockFreeQueue.cs" />
     <Compile Include="DataStructures\WaitFree\WaitFreeCombinator.cs" />
     <Compile Include="DataStructures\WaitFree\WaitFreeQueue.cs" />
     <Compile Include="Demo\1.ThreadAffinity.cs" />
+    <Compile Include="Demo\11.AsyncTest.cs" />
     <Compile Include="Demo\2.ThreadAbort.cs" />
     <Compile Include="Demo\3.Locks.cs" />
     <Compile Include="Demo\4.SpinWaitLock.cs" />
     <Compile Include="Demo\5.ReadWriteLock.cs" />
+    <Compile Include="Demo\6.MemoryModel.cs" />
+    <Compile Include="Demo\7.Parallel.cs" />
+    <Compile Include="Demo\8.ThreadPool.cs" />
+    <Compile Include="Demo\10.Tasks.cs" />
+    <Compile Include="Demo\9.SynchronizationContext.cs" />
     <Compile Include="Demo\Experiments.cs" />
     <Compile Include="Demo\Rw\SimpleReadWriteLock.cs" />
     <Compile Include="Demo\Rw\ReadWriteLockCookie.cs" />
@@ -70,6 +77,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Demo\0.Plan.txt" />
+    <Content Include="Demo\ToRead.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
