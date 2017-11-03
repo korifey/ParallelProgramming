@@ -1,3 +1,14 @@
 
+Memory Model: 
+http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-334.pdf
 
-Asynchronous Programming Patterns: https://msdn.microsoft.com/ru-ru/library/jj152938(v=vs.110).aspx
+Memory Model explained:
+https://msdn.microsoft.com/en-us/magazine/jj863136.aspx
+https://msdn.microsoft.com/en-us/magazine/jj883956.aspx
+
+
+Asynchronous Programming Patterns: 
+https://msdn.microsoft.com/ru-ru/library/jj152938(v=vs.110).aspx
+
+Parallel Programming with .NET blog
+https://blogs.msdn.microsoft.com/pfxteam/

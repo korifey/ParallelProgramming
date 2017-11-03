@@ -10,12 +10,16 @@ namespace ParallelProgramming.Demo
 {
     public class Demo10_Tasks
     {
-        const int lim = 1_000_000;
+        const int lim = 1_000_000_000;
         
         
         [Test]
         public void TasksTest()
         {
+            var cancellationTokenSource = new CancellationTokenSource();
+            var cancellationToken = cancellationTokenSource.Token;
+            
+
             var task = new Task<int>(() =>
             {
                 int i = 0;
@@ -24,14 +28,30 @@ namespace ParallelProgramming.Demo
                 {
                     res += i.IsPrime() ? 1 : 0;
                     i++;
+
+                    cancellationToken.ThrowIfCancellationRequested();
                 }
                 
                 return res;
-            });
+            }, cancellationToken);
             
             task.Start();
 
-            Console.WriteLine(task.Result);
+            var continuation = task.ContinueWith(_ =>
+            {
+                Console.WriteLine(task.Result);
+            }, TaskContinuationOptions.OnlyOnRanToCompletion);
+
+            var cont2 = task.ContinueWith(_ =>
+            {
+                Console.WriteLine("Cancelled");
+            }, TaskContinuationOptions.OnlyOnCanceled);
+
+            Task.Delay(1000).ContinueWith(_ => cancellationTokenSource.Cancel());
+            
+            
+            Task.WaitAll(new Task[] {continuation, cont2});
+
 
         }
 
@@ -74,7 +94,13 @@ namespace ParallelProgramming.Demo
                 
             });
             
+            
             var cnt = task.ContinueWith(_ =>
+                {
+                    Task.Delay(1000).ContinueWith(__ => { }, TaskContinuationOptions.AttachedToParent);
+                })
+                
+                .ContinueWith(_ =>
             {
                 Console.WriteLine("Continuation");
             });

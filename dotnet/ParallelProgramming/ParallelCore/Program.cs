@@ -14,7 +14,7 @@ namespace ParallelCore
                               $"ThreadPriority={Thread.CurrentThread.Priority}");
 
 //            Demo1.Do();
-            Demo4Async.Do();
+            Demo3StaContext.Do();
         }
     }
 }
